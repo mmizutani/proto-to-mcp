@@ -35,12 +35,30 @@ The Model Context Protocol (MCP) provides a standardized way for AI models to in
 pip install proto-to-mcp
 ```
 
+### Install via uv (recommended)
+
+```bash
+# Install uv if you don't have it
+pip install uv
+
+# Install proto-to-mcp with uv
+uv pip install proto-to-mcp
+```
+
 ### Install from source
 
 ```bash
 git clone https://github.com/username/proto-to-mcp.git
 cd proto-to-mcp
 pip install -e .
+```
+
+### Install from source using uv
+
+```bash
+git clone https://github.com/mmizutani/proto-to-mcp.git
+cd proto-to-mcp
+uv pip install -e .
 ```
 
 ## Usage
@@ -203,15 +221,19 @@ The generated MCP server uses the FastMCP framework, which provides a high-level
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/proto-to-mcp.git
+git clone https://github.com/mmizutani/proto-to-mcp.git
 cd proto-to-mcp
 
 # Create and activate a virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install development dependencies
+# Install development dependencies using pip
 pip install -e ".[dev]"
+
+# Or using uv (recommended for faster installation)
+pip install uv
+uv pip install -e ".[dev]"
 ```
 
 ### Formatting and Linting
@@ -219,21 +241,25 @@ pip install -e ".[dev]"
 This project uses [Ruff](https://docs.astral.sh/ruff/) for code formatting and linting. Ruff replaces multiple tools (Black, isort, flake8) with a single, fast Rust-based solution.
 
 To format your code:
+
 ```bash
 ruff format src tests
 ```
 
 To lint your code:
+
 ```bash
 ruff check src tests
 ```
 
 To automatically fix linting issues where possible:
+
 ```bash
 ruff check --fix src tests
 ```
 
 You can also install pre-commit hooks to automatically format and lint your code before each commit:
+
 ```bash
 pip install pre-commit
 pre-commit install
