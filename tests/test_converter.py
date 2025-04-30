@@ -1,8 +1,5 @@
-"""
-Tests for the converter module.
-"""
-import pytest
-from proto_to_mcp.converter import convert_proto_to_mcp, convert_mcp_to_proto
+"""Tests for the converter module."""
+from proto_to_mcp.converter import convert_mcp_to_proto, convert_proto_to_mcp
 
 
 def test_convert_proto_to_mcp_primitives():
@@ -54,7 +51,7 @@ def test_convert_mcp_to_proto_primitives():
 
     # Check camelCase to snake_case conversion
     assert "is_active" in proto_data
-    assert proto_data["is_active"] == True
+    assert proto_data["is_active"]
     assert proto_data["id"] == 123
     assert proto_data["name"] == "test"
     assert proto_data["score"] == 98.6

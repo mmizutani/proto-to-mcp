@@ -1,21 +1,16 @@
-"""
-gRPC client module for connecting to gRPC services.
-"""
+"""gRPC client module for connecting to gRPC services."""
 import importlib
 import logging
-from typing import Dict, Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
 class GRPCClient:
-    """
-    Client for connecting to and calling methods on gRPC services.
-    """
+    """Client for connecting to and calling methods on gRPC services."""
 
-    def __init__(self, server_address: Optional[str] = None):
-        """
-        Initialize the gRPC client.
+    def __init__(self, server_address: str | None = None):
+        """Initialize the gRPC client.
 
         Args:
             server_address (Optional[str]): The address of the gRPC server, e.g., 'localhost:50051'
@@ -23,9 +18,8 @@ class GRPCClient:
         self.server_address = server_address
         self.stubs = {}
 
-    def call_method(self, service_name: str, method_name: str, request_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Call a method on a gRPC service.
+    def call_method(self, service_name: str, method_name: str, request_data: dict[str, Any]) -> dict[str, Any]:
+        """Call a method on a gRPC service.
 
         Args:
             service_name (str): Name of the service
@@ -60,7 +54,7 @@ class GRPCClient:
                 request = request_class(**request_data)
             except Exception as e:
                 logger.error(f"Error creating request object: {e}")
-                return {"error": f"Error creating request: {str(e)}"}
+                return {"error": f"Error creating request: {e!s}"}
 
             # Make the gRPC call
             response = method(request)
@@ -70,11 +64,10 @@ class GRPCClient:
 
         except Exception as e:
             logger.error(f"Error calling gRPC method {service_name}.{method_name}: {e}")
-            return {"error": f"Error calling gRPC method: {str(e)}"}
+            return {"error": f"Error calling gRPC method: {e!s}"}
 
     def _get_stub(self, service_name: str):
-        """
-        Get or create a stub for a service.
+        """Get or create a stub for a service.
 
         Args:
             service_name (str): Name of the service
@@ -92,7 +85,7 @@ class GRPCClient:
             pb2_grpc_module_name = f"{self._to_snake_case(service_name)}_pb2_grpc"
 
             try:
-                pb2 = importlib.import_module(pb2_module_name)
+                importlib.import_module(pb2_module_name)
                 pb2_grpc = importlib.import_module(pb2_grpc_module_name)
             except ImportError:
                 logger.error(f"Could not import {pb2_module_name} or {pb2_grpc_module_name}")
@@ -118,8 +111,7 @@ class GRPCClient:
             return None
 
     def _get_request_class(self, service_name: str, method_name: str):
-        """
-        Get the request class for a method.
+        """Get the request class for a method.
 
         Args:
             service_name (str): Name of the service
@@ -160,9 +152,8 @@ class GRPCClient:
             logger.error(f"Error getting request class for {method_name}: {e}")
             return None
 
-    def _message_to_dict(self, message) -> Dict[str, Any]:
-        """
-        Convert a gRPC message to a dictionary.
+    def _message_to_dict(self, message) -> dict[str, Any]:
+        """Convert a gRPC message to a dictionary.
 
         Args:
             message: The gRPC message object
@@ -181,7 +172,7 @@ class GRPCClient:
                 value = getattr(message, field.name)
                 if hasattr(value, 'DESCRIPTOR'):
                     result[field.name] = self._message_to_dict(value)
-                elif isinstance(value, (list, tuple)):
+                elif isinstance(value, list | tuple):
                     result[field.name] = [
                         self._message_to_dict(item) if hasattr(item, 'DESCRIPTOR') else item
                         for item in value
@@ -191,8 +182,7 @@ class GRPCClient:
             return result
 
     def _to_snake_case(self, name: str) -> str:
-        """
-        Convert a CamelCase name to snake_case.
+        """Convert a CamelCase name to snake_case.
 
         Args:
             name (str): The name to convert

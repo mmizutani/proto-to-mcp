@@ -1,22 +1,17 @@
-"""
-Command-line interface for proto-to-mcp.
-"""
-import os
-import sys
+"""Command-line interface for proto-to-mcp."""
 import argparse
 import logging
-from typing import List, Optional
+import os
+import sys
 
-from .parser import ProtoParser
 from .generator import MCPServerGenerator
-
+from .parser import ProtoParser
 
 logger = logging.getLogger(__name__)
 
 
-def main(args: Optional[List[str]] = None) -> int:
-    """
-    Main entry point for the proto-to-mcp CLI.
+def main(args: list[str] | None = None) -> int:
+    """Main entry point for the proto-to-mcp CLI.
 
     Args:
         args (Optional[List[str]]): Command-line arguments
@@ -64,7 +59,7 @@ def main(args: Optional[List[str]] = None) -> int:
         if not os.path.exists(proto_file):
             logger.error(f"Proto file not found: {proto_file}")
             return 1
-        
+
         if not proto_file.endswith(".proto"):
             logger.error(f"Input file must be a .proto file: {proto_file}")
             return 1
@@ -79,7 +74,7 @@ def main(args: Optional[List[str]] = None) -> int:
         # Parse the proto file
         logger.info(f"Parsing proto file: {proto_file}")
         parser = ProtoParser(proto_file)
-        
+
         # Generate the MCP server
         logger.info(f"Generating MCP server: {output_file}")
         generator = MCPServerGenerator(parser)
@@ -88,12 +83,12 @@ def main(args: Optional[List[str]] = None) -> int:
             server_name=parsed_args.name,
             grpc_server=parsed_args.grpc_server
         )
-        
+
         logger.info(f"Successfully generated MCP server: {output_file}")
         return 0
 
     except Exception as e:
-        logger.error(f"Error generating MCP server: {str(e)}", exc_info=parsed_args.verbose)
+        logger.error(f"Error generating MCP server: {e!s}", exc_info=parsed_args.verbose)
         return 1
 
 

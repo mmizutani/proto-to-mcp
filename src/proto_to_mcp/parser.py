@@ -1,20 +1,16 @@
-"""
-Parser module for extracting service and message definitions from Protocol Buffer schema files.
-"""
+"""Parser module for extracting service and message definitions from Protocol Buffer schema files."""
 import os
-from typing import Dict, Any
+from typing import Any
+
 from google.protobuf.compiler import parser as proto_parser
 from google.protobuf.descriptor_pb2 import FileDescriptorProto
 
 
 class ProtoParser:
-    """
-    Parser for Protocol Buffer schema files (.proto) that extracts service and message definitions.
-    """
+    """Parser for Protocol Buffer schema files (.proto) that extracts service and message definitions."""
 
     def __init__(self, proto_file: str):
-        """
-        Initialize the parser with a path to a .proto file.
+        """Initialize the parser with a path to a .proto file.
 
         Args:
             proto_file (str): Path to the .proto file to parse
@@ -27,15 +23,13 @@ class ProtoParser:
         self._parse()
 
     def _parse(self) -> None:
-        """
-        Parse the .proto file to extract service and message definitions.
-        """
+        """Parse the .proto file to extract service and message definitions."""
         try:
             if not os.path.exists(self.proto_file):
                 raise ValueError(f"Proto file not found: {self.proto_file}")
 
             # Read the proto file content
-            with open(self.proto_file, 'r') as f:
+            with open(self.proto_file) as f:
                 content = f.read()
 
             # Parse the proto content directly using the protobuf parser
@@ -62,11 +56,10 @@ class ProtoParser:
                 self.services[service.name] = methods
 
         except Exception as e:
-            raise ValueError(f"Failed to parse proto file: {str(e)}")
+            raise ValueError(f"Failed to parse proto file: {e!s}")
 
-    def _extract_message_fields(self, message_type) -> Dict[str, Dict[str, Any]]:
-        """
-        Extract field information from a message type.
+    def _extract_message_fields(self, message_type) -> dict[str, dict[str, Any]]:
+        """Extract field information from a message type.
 
         Args:
             message_type: The message type descriptor
@@ -85,8 +78,7 @@ class ProtoParser:
         return fields
 
     def _get_field_type(self, field) -> str:
-        """
-        Get the type name for a field.
+        """Get the type name for a field.
 
         Args:
             field: The field descriptor
@@ -122,18 +114,16 @@ class ProtoParser:
             # For message types, return the type name
             return field.type_name.split(".")[-1]
 
-    def get_services(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
-        """
-        Get all services defined in the proto file.
+    def get_services(self) -> dict[str, dict[str, dict[str, Any]]]:
+        """Get all services defined in the proto file.
 
         Returns:
             Dict[str, Dict[str, Dict[str, Any]]]: A dictionary mapping service names to their methods
         """
         return self.services
 
-    def get_messages(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
-        """
-        Get all messages defined in the proto file.
+    def get_messages(self) -> dict[str, dict[str, dict[str, Any]]]:
+        """Get all messages defined in the proto file.
 
         Returns:
             Dict[str, Dict[str, Dict[str, Any]]]: A dictionary mapping message names to their fields
@@ -141,8 +131,7 @@ class ProtoParser:
         return self.messages
 
     def get_package(self) -> str:
-        """
-        Get the package name from the proto file.
+        """Get the package name from the proto file.
 
         Returns:
             str: The package name

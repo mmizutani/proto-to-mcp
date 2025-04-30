@@ -1,8 +1,6 @@
-"""
-Tests for the parser module.
-"""
-import os
+"""Tests for the parser module."""
 import pytest
+
 from proto_to_mcp.parser import ProtoParser
 
 

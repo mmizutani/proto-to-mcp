@@ -1,9 +1,7 @@
-"""
-Tests for the generator module.
-"""
+"""Tests for the generator module."""
 import os
 import tempfile
-import pytest
+
 from proto_to_mcp.generator import MCPServerGenerator
 from tests.test_parser import MockProtoParser
 
@@ -33,7 +31,7 @@ def test_generate_server_code():
         # Check that the file exists and contains expected content
         assert os.path.exists(temp_filename)
 
-        with open(temp_filename, "r") as f:
+        with open(temp_filename) as f:
             content = f.read()
 
             # Check for key elements

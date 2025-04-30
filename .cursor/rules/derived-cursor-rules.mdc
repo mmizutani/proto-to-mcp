@@ -5,13 +5,14 @@ globs: *
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 
-This section outlines the standards for project documentation and the context system used by the AI coding assistant.  All documentation must be clear, concise, and easily accessible.
+This section outlines the standards for project documentation and the context system used by the AI coding assistant.  All documentation must be clear, concise, and easily accessible.  The README.md file should include instructions for installing dependencies using both pip and uv.
 
 ## TECH STACK
 
 This section lists the technologies used in the project.
 
-* **Programming Languages:** Python
+* **Programming Languages:** Python 3.13 (default), Python 3.12, Python 3.11, Python 3.10, Python 3.9
+* **Package Manager:** pip, uv (added 2025-05-01)
 * **Formatting:** Ruff (replacing Black, isort)
 * **Linting:** Ruff (replacing flake8)
 * **Pre-commit hooks:** ruff, ruff-format, trailing-whitespace, end-of-file-fixer, check-yaml, check-toml, debug-statements, mypy
@@ -19,13 +20,12 @@ This section lists the technologies used in the project.
 
 ## CODING STANDARDS
 
-This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.
+This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.  Python 3.13 should be used as the default version for new projects.
 
 
 ## WORKFLOW & RELEASE RULES
 
-This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.
-
+This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.  The CI workflow should utilize uv for dependency management.  The CI workflow should use Python 3.13.
 
 ## DEBUGGING
 
@@ -37,3 +37,4 @@ This section outlines debugging procedures and best practices.
 This section lists relevant references and documentation.
 * Ruff: https://docs.astral.sh/ruff/
 * Pre-commit: https://pre-commit.com/
+* uv: (link to uv documentation needed -  To be added after confirmation from user)

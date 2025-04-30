@@ -1,16 +1,14 @@
-"""
-Advanced example of using proto-to-mcp with custom configurations and a gRPC backend.
-"""
+"""Advanced example of using proto-to-mcp with custom configurations and a gRPC backend."""
+import argparse
 import os
 import sys
-import argparse
 from pathlib import Path
 
 # Add the parent directory to the Python path to import proto_to_mcp
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from proto_to_mcp.parser import ProtoParser
 from proto_to_mcp.generator import MCPServerGenerator
+from proto_to_mcp.parser import ProtoParser
 
 
 def main():

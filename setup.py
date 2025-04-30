@@ -1,5 +1,4 @@
-"""
-Setup script for proto-to-mcp.
+"""Setup script for proto-to-mcp.
 This is kept for backwards compatibility with older Python packaging tools.
 Most configuration is in pyproject.toml.
 """

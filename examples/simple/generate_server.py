@@ -1,6 +1,4 @@
-"""
-Simple example of using proto-to-mcp to generate an MCP server from a Protobuf schema.
-"""
+"""Simple example of using proto-to-mcp to generate an MCP server from a Protobuf schema."""
 import os
 import sys
 from pathlib import Path
@@ -8,8 +6,8 @@ from pathlib import Path
 # Add the parent directory to the Python path to import proto_to_mcp
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from proto_to_mcp.parser import ProtoParser
 from proto_to_mcp.generator import MCPServerGenerator
+from proto_to_mcp.parser import ProtoParser
 
 
 def main():

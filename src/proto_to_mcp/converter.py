@@ -1,13 +1,10 @@
-"""
-Converter module for converting between Protocol Buffer and MCP data formats.
-"""
-from typing import Dict, List, Any, Union, Optional
+"""Converter module for converting between Protocol Buffer and MCP data formats."""
+from typing import Any
 
 
-def convert_proto_to_mcp(proto_data: Union[Dict[str, Any], List[Dict[str, Any]]],
-                         message_type: Optional[str] = None) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
-    """
-    Convert Protocol Buffer data to MCP format.
+def convert_proto_to_mcp(proto_data: dict[str, Any] | list[dict[str, Any]],
+                         message_type: str | None = None) -> dict[str, Any] | list[dict[str, Any]]:
+    """Convert Protocol Buffer data to MCP format.
 
     Args:
         proto_data (Union[Dict[str, Any], List[Dict[str, Any]]]): Data in Protobuf format
@@ -40,10 +37,9 @@ def convert_proto_to_mcp(proto_data: Union[Dict[str, Any], List[Dict[str, Any]]]
     return result
 
 
-def convert_mcp_to_proto(mcp_data: Union[Dict[str, Any], List[Dict[str, Any]]],
-                         message_type: Optional[str] = None) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
-    """
-    Convert MCP data to Protocol Buffer format.
+def convert_mcp_to_proto(mcp_data: dict[str, Any] | list[dict[str, Any]],
+                         message_type: str | None = None) -> dict[str, Any] | list[dict[str, Any]]:
+    """Convert MCP data to Protocol Buffer format.
 
     Args:
         mcp_data (Union[Dict[str, Any], List[Dict[str, Any]]]): Data in MCP format
@@ -80,8 +76,7 @@ def convert_mcp_to_proto(mcp_data: Union[Dict[str, Any], List[Dict[str, Any]]],
 
 
 def _camel_to_snake(name: str) -> str:
-    """
-    Convert a camelCase name to snake_case.
+    """Convert a camelCase name to snake_case.
 
     Args:
         name (str): The name to convert
@@ -95,8 +90,7 @@ def _camel_to_snake(name: str) -> str:
 
 
 def _snake_to_camel(name: str) -> str:
-    """
-    Convert a snake_case name to camelCase.
+    """Convert a snake_case name to camelCase.
 
     Args:
         name (str): The name to convert

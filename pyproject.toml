@@ -24,10 +24,10 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "protobuf>=4.0.0",
-    "fastmcp>=0.1.0",
-    "grpcio>=1.50.0",
-    "grpcio-tools>=1.50.0",
+    "fastmcp>=2.2.6",
+    "grpcio>=1.71.0",
+    "grpcio-tools>=1.71.0",
+    "protobuf>=5.29.4",
 ]
 requires-python = ">=3.13"
 
@@ -88,3 +88,8 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
 python_classes = "Test*"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.7",
+]
