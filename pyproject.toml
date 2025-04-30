@@ -34,12 +34,10 @@ requires-python = ">=3.9"
 dev = [
     "pytest>=8.3.5",
     "pytest-cov>=6.1.1",
-    "flake8>=6.0.0",
-    "black>=23.0.0",
-    "isort>=5.10.0",
+    "ruff>=0.5.0",
     "mypy>=1.0.0",
-    "twine>=4.0.0",
-    "build>=1.0.0",
+    "twine>=6.1.0",
+    "build>=1.2.2",
 ]
 
 [project.urls]
@@ -50,13 +48,31 @@ dev = [
 [project.scripts]
 proto-to-mcp = "proto_to_mcp.cli:main"
 
-[tool.black]
+[tool.ruff]
 line-length = 100
-target-version = ["py39", "py310", "py311"]
+target-version = "py313"
+# Enable Pyflakes (`F`), isort (`I`), and other linters
+select = ["E", "F", "I", "W", "N", "B", "PYI", "UP", "D", "RUF"]
+ignore = []
 
-[tool.isort]
-profile = "black"
-line_length = 100
+# Same as Black
+indent-width = 4
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+skip-magic-trailing-comma = false
+
+[tool.ruff.isort]
+case-sensitive = true
+known-first-party = ["proto_to_mcp"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.mypy]
 python_version = "3.9"

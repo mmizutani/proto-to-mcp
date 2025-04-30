@@ -214,6 +214,31 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e ".[dev]"
 ```
 
+### Formatting and Linting
+
+This project uses [Ruff](https://docs.astral.sh/ruff/) for code formatting and linting. Ruff replaces multiple tools (Black, isort, flake8) with a single, fast Rust-based solution.
+
+To format your code:
+```bash
+ruff format src tests
+```
+
+To lint your code:
+```bash
+ruff check src tests
+```
+
+To automatically fix linting issues where possible:
+```bash
+ruff check --fix src tests
+```
+
+You can also install pre-commit hooks to automatically format and lint your code before each commit:
+```bash
+pip install pre-commit
+pre-commit install
+```
+
 ### Run Tests
 
 ```bash

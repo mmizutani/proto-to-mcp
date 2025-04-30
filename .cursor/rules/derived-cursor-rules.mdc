@@ -1,0 +1,39 @@
+---
+description: AI rules derived by SpecStory from the project AI interaction history
+globs: *
+---
+
+## PROJECT DOCUMENTATION & CONTEXT SYSTEM
+
+This section outlines the standards for project documentation and the context system used by the AI coding assistant.  All documentation must be clear, concise, and easily accessible.
+
+## TECH STACK
+
+This section lists the technologies used in the project.
+
+* **Programming Languages:** Python
+* **Formatting:** Ruff (replacing Black, isort)
+* **Linting:** Ruff (replacing flake8)
+* **Pre-commit hooks:** ruff, ruff-format, trailing-whitespace, end-of-file-fixer, check-yaml, check-toml, debug-statements, mypy
+
+
+## CODING STANDARDS
+
+This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.
+
+
+## WORKFLOW & RELEASE RULES
+
+This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.
+
+
+## DEBUGGING
+
+This section outlines debugging procedures and best practices.
+
+
+## REFERENCES
+
+This section lists relevant references and documentation.
+* Ruff: https://docs.astral.sh/ruff/
+* Pre-commit: https://pre-commit.com/

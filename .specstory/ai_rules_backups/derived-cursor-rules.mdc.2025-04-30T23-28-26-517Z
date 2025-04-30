@@ -1,0 +1,28 @@
+
+## PROJECT DOCUMENTATION & CONTEXT SYSTEM
+
+This section outlines the standards for project documentation and the context system used by the AI coding assistant.  All documentation must be clear, concise, and easily accessible.
+
+## TECH STACK
+
+This section lists the technologies used in the project.
+
+* **Programming Languages:** Python
+* **Formatting:** Ruff (replacing Black, isort)
+
+
+## CODING STANDARDS
+
+This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.
+
+## WORKFLOW & RELEASE RULES
+
+This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.
+
+## DEBUGGING
+
+This section outlines debugging procedures and best practices.
+
+## REFERENCES
+
+This section lists relevant references and documentation.
