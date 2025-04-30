@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package test.fixture;
+
+// A test service for unit testing
+service TestService {
+  // Get data by ID
+  rpc GetData (GetDataRequest) returns (GetDataResponse);
+
+  // Stream data (server streaming)
+  rpc StreamData (StreamDataRequest) returns (stream DataItem);
+}
+
+// Request to get data by ID
+message GetDataRequest {
+  int32 id = 1;
+}
+
+// Response with data
+message GetDataResponse {
+  DataItem data = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+// Request to stream data
+message StreamDataRequest {
+  string filter = 1;
+  int32 max_items = 2;
+}
+
+// Generic data item
+message DataItem {
+  int32 id = 1;
+  string name = 2;
+  repeated string tags = 3;
+  Metadata metadata = 4;
+}
+
+// Metadata for a data item
+message Metadata {
+  string created_at = 1;
+  string updated_at = 2;
+  string created_by = 3;
+}

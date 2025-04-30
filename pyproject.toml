@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proto-to-mcp"
+version = "0.1.0"
+description = "Convert Protocol Buffer (Protobuf) schema files to Model Context Protocol (MCP) servers"
+readme = "README.md"
+authors = [
+    {name = "Minoru Mizutani", email = "minoru.mizutani@gmail.com"}
+]
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "protobuf>=4.0.0",
+    "fastmcp>=0.1.0",
+    "grpcio>=1.50.0",
+    "grpcio-tools>=1.50.0",
+]
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "isort>=5.10.0",
+    "mypy>=1.0.0",
+    "twine>=4.0.0",
+    "build>=1.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mmizutani/proto-to-mcp"
+"Bug Tracker" = "https://github.com/mmizutani/proto-to-mcp/issues"
+"Documentation" = "https://github.com/mmizutani/proto-to-mcp/docs"
+
+[project.scripts]
+proto-to-mcp = "proto_to_mcp.cli:main"
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+python_classes = "Test*"
