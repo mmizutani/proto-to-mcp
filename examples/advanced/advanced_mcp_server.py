@@ -23,6 +23,34 @@ mcp: FastMCP = FastMCP(
 )
 grpc_client: GRPCClient | None = None
 
+# --- Enum Classes ---
+class BookCategory:
+    """Enum representing the BookCategory from the Protobuf definition."""
+    FICTION = "FICTION"
+    NON_FICTION = "NON_FICTION"
+    SCIENCE = "SCIENCE"
+    BIOGRAPHY = "BIOGRAPHY"
+    TECHNOLOGY = "TECHNOLOGY"
+    OTHER = "OTHER"
+
+
+class BookStatus:
+    """Enum representing the BookStatus from the Protobuf definition."""
+    AVAILABLE = "AVAILABLE"
+    BORROWED = "BORROWED"
+    RESERVED = "RESERVED"
+    UNDER_MAINTENANCE = "UNDER_MAINTENANCE"
+
+
+class BookEventType:
+    """Enum representing the BookEventType from the Protobuf definition."""
+    BOOK_ADDED = "BOOK_ADDED"
+    BOOK_UPDATED = "BOOK_UPDATED"
+    BOOK_DELETED = "BOOK_DELETED"
+    BOOK_BORROWED = "BOOK_BORROWED"
+    BOOK_RETURNED = "BOOK_RETURNED"
+
+
 # --- Message classes ---
 class GetBookRequest:
     """Represents the GetBookRequest message from the Protobuf definition."""
@@ -85,6 +113,33 @@ class ListBooksRequest:
             instance.page_size = data['page_size']
         if 'page_token' in data:
             instance.page_token = data['page_token']
+        return instance
+
+
+class AdditionalInfoEntry:
+    """Represents the AdditionalInfoEntry message from the Protobuf definition."""
+
+    def __init__(self, key: str | None = None, value: str | None = None):
+        self.key = key
+        self.value = value
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert message to a dictionary."""
+        result: dict[str, Any] = {}
+        if self.key is not None:
+            result['key'] = self.key
+        if self.value is not None:
+            result['value'] = self.value
+        return result
+
+    @staticmethod
+    def from_dict(data: dict[str, Any]) -> 'AdditionalInfoEntry':
+        """Create an AdditionalInfoEntry from a dictionary."""
+        instance = AdditionalInfoEntry()
+        if 'key' in data:
+            instance.key = data['key']
+        if 'value' in data:
+            instance.value = data['value']
         return instance
 
 
@@ -432,61 +487,6 @@ class BookEvent:
             instance.book = Book.from_dict(data['book'])
         if 'timestamp' in data:
             instance.timestamp = data['timestamp']
-        return instance
-
-
-# --- Enum Classes ---
-class BookCategory:
-    """Enum representing the BookCategory from the Protobuf definition."""
-    FICTION = "FICTION"
-    NON_FICTION = "NON_FICTION"
-    SCIENCE = "SCIENCE"
-    BIOGRAPHY = "BIOGRAPHY"
-    TECHNOLOGY = "TECHNOLOGY"
-    OTHER = "OTHER"
-
-
-class BookStatus:
-    """Enum representing the BookStatus from the Protobuf definition."""
-    AVAILABLE = "AVAILABLE"
-    BORROWED = "BORROWED"
-    RESERVED = "RESERVED"
-    UNDER_MAINTENANCE = "UNDER_MAINTENANCE"
-
-
-class BookEventType:
-    """Enum representing the BookEventType from the Protobuf definition."""
-    BOOK_ADDED = "BOOK_ADDED"
-    BOOK_UPDATED = "BOOK_UPDATED"
-    BOOK_DELETED = "BOOK_DELETED"
-    BOOK_BORROWED = "BOOK_BORROWED"
-    BOOK_RETURNED = "BOOK_RETURNED"
-
-
-class AdditionalInfoEntry:
-    """Represents the AdditionalInfoEntry message from the Protobuf definition."""
-
-    def __init__(self, key: str | None = None, value: str | None = None):
-        self.key = key
-        self.value = value
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert message to a dictionary."""
-        result: dict[str, Any] = {}
-        if self.key is not None:
-            result['key'] = self.key
-        if self.value is not None:
-            result['value'] = self.value
-        return result
-
-    @staticmethod
-    def from_dict(data: dict[str, Any]) -> 'AdditionalInfoEntry':
-        """Create an AdditionalInfoEntry from a dictionary."""
-        instance = AdditionalInfoEntry()
-        if 'key' in data:
-            instance.key = data['key']
-        if 'value' in data:
-            instance.value = data['value']
         return instance
 
 
