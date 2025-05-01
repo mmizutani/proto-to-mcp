@@ -1,10 +1,12 @@
 """Parser module for extracting service and message definitions from Protocol Buffer schema files."""
 
 import os
-from typing import Any
+from typing import Any, Optional
 
-from google.protobuf.compiler import parser as proto_parser
-from google.protobuf.descriptor_pb2 import FileDescriptorProto
+# Replace the incorrect import with an alternative approach
+# from google.protobuf.compiler import parser as proto_parser
+from google.protobuf.descriptor_pb2 import FileDescriptorProto, FileDescriptorSet
+from google.protobuf import text_format
 
 
 class ProtoParser:
@@ -17,9 +19,9 @@ class ProtoParser:
             proto_file (str): Path to the .proto file to parse
         """
         self.proto_file = proto_file
-        self.file_descriptor = None
-        self.services = {}
-        self.messages = {}
+        self.file_descriptor: Optional[FileDescriptorProto] = None
+        self.services: dict[str, dict[str, Any]] = {}
+        self.messages: dict[str, dict[str, Any]] = {}
         self.package = ""
         self._parse()
 
@@ -33,20 +35,46 @@ class ProtoParser:
             with open(self.proto_file) as f:
                 content = f.read()
 
-            # Parse the proto content directly using the protobuf parser
-            file_descriptor = FileDescriptorProto()
-            proto_parser.Parse(content, file_descriptor)
+            # Parse the proto content using protoc command line tool
+            import subprocess
+            import tempfile
 
-            self.file_descriptor = file_descriptor
-            self.package = file_descriptor.package
+            # Create a temporary file for the descriptor set
+            with tempfile.NamedTemporaryFile(suffix='.pb') as tmp:
+                # Call protoc to generate a FileDescriptorSet
+                protoc_cmd = [
+                    "protoc",
+                    f"--proto_path={os.path.dirname(self.proto_file)}",
+                    f"--descriptor_set_out={tmp.name}",
+                    "--include_imports",
+                    self.proto_file
+                ]
+
+                subprocess.run(protoc_cmd, check=True)
+
+                # Read the descriptor set
+                file_descriptor_set = FileDescriptorSet()
+                with open(tmp.name, 'rb') as f:
+                    file_descriptor_set.ParseFromString(f.read())
+
+                # Get the first file descriptor (our target .proto file)
+                if not file_descriptor_set.file:
+                    raise ValueError("No file descriptors found")
+
+                self.file_descriptor = file_descriptor_set.file[0]
+
+            if self.file_descriptor is None:
+                raise ValueError("Failed to parse proto file: file descriptor is None")
+
+            self.package = self.file_descriptor.package
 
             # Extract messages
-            for message_type in file_descriptor.message_type:
+            for message_type in self.file_descriptor.message_type:
                 self.messages[message_type.name] = self._extract_message_fields(message_type)
 
             # Extract services
-            for service in file_descriptor.service:
-                methods = {}
+            for service in self.file_descriptor.service:
+                methods: dict[str, dict[str, Any]] = {}
                 for method in service.method:
                     methods[method.name] = {
                         "input_type": method.input_type.split(".")[-1],

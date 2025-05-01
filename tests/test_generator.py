@@ -2,23 +2,30 @@
 
 import os
 import tempfile
+from typing import Any, Dict
 
 from proto_to_mcp.generator import MCPServerGenerator
-from tests.test_parser import MockProtoParser
+from proto_to_mcp.parser import ProtoParser
 
 
-def test_server_generator_initialization():
+def get_test_parser() -> ProtoParser:
+    """Helper function to get a parser for testing."""
+    fixture_path = os.path.join(os.path.dirname(__file__), "fixtures", "test_service.proto")
+    return ProtoParser(fixture_path)
+
+
+def test_server_generator_initialization() -> None:
     """Test that the MCPServerGenerator can be initialized with a parser."""
-    parser = MockProtoParser()
+    parser = get_test_parser()
     generator = MCPServerGenerator(parser)
     assert generator.services == parser.get_services()
     assert generator.messages == parser.get_messages()
     assert generator.package == parser.get_package()
 
 
-def test_generate_server_code():
+def test_generate_server_code() -> None:
     """Test that the generate_server_code method creates a file with the expected content."""
-    parser = MockProtoParser()
+    parser = get_test_parser()
     generator = MCPServerGenerator(parser)
 
     # Create a temporary file for the output
@@ -37,7 +44,7 @@ def test_generate_server_code():
 
             # Check for key elements
             assert "class TestMCPServer(FastMCP):" in content
-            assert "class TestMessage:" in content
+            assert "class DataItem:" in content
             assert "class GetDataRequest:" in content
             assert "class GetDataResponse:" in content
             assert "@Tool" in content
@@ -49,9 +56,9 @@ def test_generate_server_code():
             os.unlink(temp_filename)
 
 
-def test_camel_to_snake():
+def test_camel_to_snake() -> None:
     """Test the _camel_to_snake method."""
-    parser = MockProtoParser()
+    parser = get_test_parser()
     generator = MCPServerGenerator(parser)
 
     assert generator._camel_to_snake("GetUserData") == "get_user_data"

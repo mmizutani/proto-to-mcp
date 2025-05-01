@@ -20,6 +20,7 @@ This section lists the technologies used in the project.
 * **Build System:** Makefile (added 2025-05-01)
 * **Testing Framework:** pytest
 * **Testing Coverage:** pytest-cov (added 2025-05-01)
+* **Protocol Buffers Compiler:** protoc (added 2025-05-01)
 
 
 ## CODING STANDARDS
@@ -29,7 +30,7 @@ This section outlines the coding standards to be followed in the project.  Code 
 
 ## WORKFLOW & RELEASE RULES
 
-This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.  The CI workflow should utilize uv for dependency management and should use caching as described in https://docs.astral.sh/uv/guides/integration/github/ (added 2025-05-01). The CI workflow should use Python 3.13. A Makefile should be used to streamline testing, linting, formatting, and type checking.  See the example Makefile generated on 2025-05-01 for a reference implementation. Lint, format, typecheck, and test should be run as separate jobs in the CI workflow (added 2025-05-01).  The Makefile should include targets for `test`, `test-coverage`, `install-pytest-cov`, `install-test-deps`, and `install`. (added 2025-05-01)  Makefile commands should utilize `uv` for command management (added 2025-05-01).  The Makefile should use `uv` to manage all commands.
+This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.  The CI workflow should utilize uv for dependency management and should use caching as described in https://docs.astral.sh/uv/guides/integration/github/ (added 2025-05-01). The CI workflow should use Python 3.13. A Makefile should be used to streamline testing, linting, formatting, and type checking.  See the example Makefile generated on 2025-05-01 for a reference implementation. Lint, format, typecheck, and test should be run as separate jobs in the CI workflow (added 2025-05-01).  The Makefile should include targets for `test`, `test-coverage`, `install-pytest-cov`, `install-test-deps`, `install`, and `install-protoc` (added 2025-05-01).  Makefile commands should utilize `uv` for command management (added 2025-05-01).  The Makefile should use `uv` to manage all commands. The Makefile should be updated to address protobuf import errors, ensuring correct dependencies are installed.  The Makefile should handle protobuf dependency installation.
 
 
 ## DEBUGGING
@@ -45,3 +46,4 @@ This section lists relevant references and documentation.
 * pytest: (link to pytest documentation needed)
 * mypy: https://mypy.readthedocs.io/
 * pytest-cov: (link to pytest-cov documentation needed - to be added after user confirmation)
+* protoc: (link to protoc documentation needed - to be added after user confirmation)

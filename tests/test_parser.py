@@ -1,90 +1,84 @@
 """Tests for the parser module."""
 
+import os
+from typing import NoReturn
+
 import pytest
+from pytest import raises
 
 from proto_to_mcp.parser import ProtoParser
 
 
-def test_proto_parser_initialization():
-    """Test that the ProtoParser can be initialized with a valid file path."""
-    # This is a mock test since we don't have an actual .proto file
-    # In a real test, you would use a fixture file
-    with pytest.raises(ValueError):
-        ProtoParser("nonexistent_file.proto")
+def test_proto_parser_initialization() -> None:
+    """Test that the ProtoParser initializes correctly with a valid proto file."""
+    fixture_path = os.path.join(os.path.dirname(__file__), "fixtures", "test_service.proto")
+    parser = ProtoParser(fixture_path)
+
+    # Check that basic properties are set
+    assert parser.proto_file == fixture_path
+    assert parser.package == "test.fixture"
+    assert parser.file_descriptor is not None
 
 
-def test_get_package():
-    """Test that the get_package method returns the correct package name."""
-    # This is a mock test that would normally use a fixture
-    parser = MockProtoParser()
-    assert parser.get_package() == "test.package"
+def test_proto_parser_services() -> None:
+    """Test that the ProtoParser extracts service definitions correctly."""
+    fixture_path = os.path.join(os.path.dirname(__file__), "fixtures", "test_service.proto")
+    parser = ProtoParser(fixture_path)
 
-
-def test_get_services():
-    """Test that the get_services method returns the correct services."""
-    parser = MockProtoParser()
     services = parser.get_services()
+
+    # Check that we found the TestService
     assert "TestService" in services
-    assert "GetData" in services["TestService"]
+
+    # Check the methods in TestService
+    test_service = services["TestService"]
+    assert "GetData" in test_service
+    assert "StreamData" in test_service
+
+    # Check method details
+    get_data = test_service["GetData"]
+    assert get_data["input_type"] == "GetDataRequest"
+    assert get_data["output_type"] == "GetDataResponse"
+    assert not get_data["client_streaming"]
+    assert not get_data["server_streaming"]
+
+    stream_data = test_service["StreamData"]
+    assert stream_data["input_type"] == "StreamDataRequest"
+    assert stream_data["output_type"] == "DataItem"
+    assert not stream_data["client_streaming"]
+    assert stream_data["server_streaming"]
 
 
-def test_get_messages():
-    """Test that the get_messages method returns the correct messages."""
-    parser = MockProtoParser()
+def test_proto_parser_messages() -> None:
+    """Test that the ProtoParser extracts message definitions correctly."""
+    fixture_path = os.path.join(os.path.dirname(__file__), "fixtures", "test_service.proto")
+    parser = ProtoParser(fixture_path)
+
     messages = parser.get_messages()
-    assert "TestMessage" in messages
-    assert "id" in messages["TestMessage"]
-    assert messages["TestMessage"]["id"]["type"] == "int32"
+
+    # Check that messages are parsed
+    assert "GetDataRequest" in messages
+    assert "GetDataResponse" in messages
+    assert "StreamDataRequest" in messages
+    assert "DataItem" in messages
+    assert "Metadata" in messages
+
+    # Check field details for a message
+    data_item = messages["DataItem"]
+    assert "id" in data_item
+    assert "name" in data_item
+    assert "tags" in data_item
+    assert "metadata" in data_item
+
+    # Check types
+    assert data_item["id"]["type"] == "int32"
+    assert data_item["name"]["type"] == "string"
+    assert data_item["tags"]["type"] == "string"
+    assert data_item["tags"]["label"] == "repeated"
+    assert data_item["metadata"]["type"] == "Metadata"
 
 
-# Mock class for testing without requiring protoc
-class MockProtoParser(ProtoParser):
-    """Mock version of ProtoParser for testing."""
-
-    def __init__(self):
-        """Initialize with mock data instead of parsing a file."""
-        self.proto_file = "mock_file.proto"
-        self.file_descriptor = None
-        self.package = "test.package"
-        self.services = {
-            "TestService": {
-                "GetData": {
-                    "input_type": "GetDataRequest",
-                    "output_type": "GetDataResponse",
-                    "client_streaming": False,
-                    "server_streaming": False,
-                }
-            }
-        }
-        self.messages = {
-            "TestMessage": {
-                "id": {
-                    "number": 1,
-                    "type": "int32",
-                    "label": "optional",
-                },
-                "name": {
-                    "number": 2,
-                    "type": "string",
-                    "label": "optional",
-                },
-            },
-            "GetDataRequest": {
-                "id": {
-                    "number": 1,
-                    "type": "int32",
-                    "label": "optional",
-                }
-            },
-            "GetDataResponse": {
-                "data": {
-                    "number": 1,
-                    "type": "TestMessage",
-                    "label": "optional",
-                }
-            },
-        }
-
-    def _parse(self):
-        """Mock implementation that does nothing."""
-        pass
+def test_proto_parser_error_handling() -> None:
+    """Test error handling for nonexistent proto files."""
+    with pytest.raises(ValueError, match="Proto file not found"):
+        ProtoParser("nonexistent_file.proto")
