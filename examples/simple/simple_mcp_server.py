@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
 import logging
-from typing import Dict, List, Optional, Any, Union, TypedDict, cast
+import os
+from typing import Any, cast
 
 from fastmcp import FastMCP
-from proto_to_mcp.converter import convert_proto_to_mcp, convert_mcp_to_proto
+
+from proto_to_mcp.converter import convert_proto_to_mcp
 from proto_to_mcp.grpc_client import GRPCClient
 
 logging.basicConfig(level=logging.INFO)
@@ -18,24 +19,24 @@ mcp: FastMCP = FastMCP(
     name="SimpleMCPServer",
     instructions="MCP server for simple.example services",
 )
-grpc_client: Optional[GRPCClient] = None
+grpc_client: GRPCClient | None = None
 
 # --- Message classes ---
 class HelloRequest:
     """Represents the HelloRequest message from the Protobuf definition."""
 
-    def __init__(self, name: Optional[str] = None):
+    def __init__(self, name: str | None = None):
         self.name = name
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert message to a dictionary."""
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         if self.name is not None:
             result['name'] = self.name
         return result
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'HelloRequest':
+    def from_dict(data: dict[str, Any]) -> 'HelloRequest':
         """Create a HelloRequest from a dictionary."""
         instance = HelloRequest()
         if 'name' in data:
@@ -46,13 +47,13 @@ class HelloRequest:
 class HelloResponse:
     """Represents the HelloResponse message from the Protobuf definition."""
 
-    def __init__(self, greeting: Optional[str] = None, timestamp: Optional[str] = None):
+    def __init__(self, greeting: str | None = None, timestamp: str | None = None):
         self.greeting = greeting
         self.timestamp = timestamp
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert message to a dictionary."""
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         if self.greeting is not None:
             result['greeting'] = self.greeting
         if self.timestamp is not None:
@@ -60,7 +61,7 @@ class HelloResponse:
         return result
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'HelloResponse':
+    def from_dict(data: dict[str, Any]) -> 'HelloResponse':
         """Create a HelloResponse from a dictionary."""
         instance = HelloResponse()
         if 'greeting' in data:
@@ -73,18 +74,18 @@ class HelloResponse:
 class UserRequest:
     """Represents the UserRequest message from the Protobuf definition."""
 
-    def __init__(self, user_id: Optional[int] = None):
+    def __init__(self, user_id: int | None = None):
         self.user_id = user_id
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert message to a dictionary."""
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         if self.user_id is not None:
             result['user_id'] = self.user_id
         return result
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'UserRequest':
+    def from_dict(data: dict[str, Any]) -> 'UserRequest':
         """Create a UserRequest from a dictionary."""
         instance = UserRequest()
         if 'user_id' in data:
@@ -95,14 +96,14 @@ class UserRequest:
 class UserProfile:
     """Represents the UserProfile message from the Protobuf definition."""
 
-    def __init__(self, full_name: Optional[str] = None, age: Optional[int] = None, interests: Optional[List[str]] = None):
+    def __init__(self, full_name: str | None = None, age: int | None = None, interests: list[str] | None = None):
         self.full_name = full_name
         self.age = age
         self.interests = interests
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert message to a dictionary."""
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         if self.full_name is not None:
             result['full_name'] = self.full_name
         if self.age is not None:
@@ -112,7 +113,7 @@ class UserProfile:
         return result
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'UserProfile':
+    def from_dict(data: dict[str, Any]) -> 'UserProfile':
         """Create a UserProfile from a dictionary."""
         instance = UserProfile()
         if 'full_name' in data:
@@ -127,16 +128,16 @@ class UserProfile:
 class UserResponse:
     """Represents the UserResponse message from the Protobuf definition."""
 
-    def __init__(self, user_id: Optional[int] = None, username: Optional[str] = None, email: Optional[str] = None, active: Optional[bool] = None, profile: Optional[UserProfile] = None):
+    def __init__(self, user_id: int | None = None, username: str | None = None, email: str | None = None, active: bool | None = None, profile: UserProfile | None = None):
         self.user_id = user_id
         self.username = username
         self.email = email
         self.active = active
         self.profile = profile
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert message to a dictionary."""
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         if self.user_id is not None:
             result['user_id'] = self.user_id
         if self.username is not None:
@@ -150,7 +151,7 @@ class UserResponse:
         return result
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> 'UserResponse':
+    def from_dict(data: dict[str, Any]) -> 'UserResponse':
         """Create a UserResponse from a dictionary."""
         instance = UserResponse()
         if 'user_id' in data:
@@ -161,7 +162,7 @@ class UserResponse:
             instance.email = data['email']
         if 'active' in data:
             instance.active = data['active']
-        if 'profile' in data and data['profile']:
+        if data.get('profile'):
             instance.profile = UserProfile.from_dict(data['profile'])
         return instance
 
@@ -170,8 +171,8 @@ class UserResponse:
 # Decorated with the global mcp instance
 
 @mcp.tool()
-def say_hello(name: Optional[str] = None) -> Dict[str, Any]:
-    """Call the SayHello RPC from GreeterService
+def say_hello(name: str | None = None) -> dict[str, Any]:
+    """Call the SayHello RPC from GreeterService.
 
     Args:
         name: The name field for the HelloRequest message
@@ -180,7 +181,7 @@ def say_hello(name: Optional[str] = None) -> Dict[str, Any]:
 
     if grpc_client:
         response = grpc_client.call_method('GreeterService', 'SayHello', request.to_dict())
-        return cast(Dict[str, Any], convert_proto_to_mcp(response, 'HelloResponse'))
+        return cast(dict[str, Any], convert_proto_to_mcp(response, 'HelloResponse'))
     else:
         # Stub implementation when no gRPC server is available
         logger.warning('No gRPC server configured for GreeterService.SayHello')
@@ -188,8 +189,8 @@ def say_hello(name: Optional[str] = None) -> Dict[str, Any]:
 
 
 @mcp.tool()
-def get_user(user_id: Optional[int] = None) -> Dict[str, Any]:
-    """Call the GetUser RPC from GreeterService
+def get_user(user_id: int | None = None) -> dict[str, Any]:
+    """Call the GetUser RPC from GreeterService.
 
     Args:
         user_id: The user_id field for the UserRequest message

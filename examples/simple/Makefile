@@ -1,7 +1,7 @@
 .PHONY: all clean install generate run
 
 UV ?= uv
-PYTHON ?= python3.13
+PYTHON ?= python3
 
 all: install generate
 

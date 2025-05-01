@@ -111,7 +111,7 @@ class MCPServerGenerator:
 
             # Generate from_dict static method
             code += "\n    @staticmethod\n"
-            code += f"    def from_dict(data: Dict[str, Any]) -> '{message_name}':\n"
+            code += f"    def from_dict(data: Dict[str, Any]) -> {message_name}:\n"
             code += f'        """Create a {message_name} from a dictionary."""\n'
             code += f"        instance = {message_name}()\n"
             for field_name, field_info in fields.items():
@@ -162,7 +162,8 @@ class MCPServerGenerator:
             "bytes": "bytes",
         }
 
-        python_type = type_mapping.get(field_type, field_type)
+        # Default to original type if not found, but ensure it's a string
+        python_type = type_mapping.get(field_type, field_type or "Any")
 
         if field_info.get("label") == "repeated":
             return f"List[{python_type}]"

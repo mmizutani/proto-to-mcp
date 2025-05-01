@@ -1,5 +1,6 @@
 """Tests for the converter module."""
 
+from typing import Any, Dict, List
 from proto_to_mcp.converter import convert_mcp_to_proto, convert_proto_to_mcp
 
 
@@ -21,11 +22,15 @@ def test_convert_proto_to_mcp_nested():
 
     mcp_data = convert_proto_to_mcp(proto_data)
 
-    assert mcp_data["user"]["id"] == 123
-    assert mcp_data["user"]["name"] == "test_user"
-    assert len(mcp_data["posts"]) == 2
-    assert mcp_data["posts"][0]["id"] == 1
-    assert mcp_data["posts"][1]["title"] == "Post 2"
+    # Use proper dict access
+    user = mcp_data.get("user", {})
+    assert user.get("id") == 123
+    assert user.get("name") == "test_user"
+
+    posts = mcp_data.get("posts", [])
+    assert len(posts) == 2
+    assert posts[0].get("id") == 1
+    assert posts[1].get("title") == "Post 2"
 
 
 def test_convert_mcp_to_proto_primitives():
@@ -36,10 +41,10 @@ def test_convert_mcp_to_proto_primitives():
 
     # Check camelCase to snake_case conversion
     assert "is_active" in proto_data
-    assert proto_data["is_active"]
-    assert proto_data["id"] == 123
-    assert proto_data["name"] == "test"
-    assert proto_data["score"] == 98.6
+    assert proto_data.get("is_active")
+    assert proto_data.get("id") == 123
+    assert proto_data.get("name") == "test"
+    assert proto_data.get("score") == 98.6
 
 
 def test_convert_mcp_to_proto_nested():
@@ -55,12 +60,14 @@ def test_convert_mcp_to_proto_nested():
     assert "user_data" in proto_data
     assert "user_posts" in proto_data
 
-    assert proto_data["user_data"]["user_id"] == 123
-    assert proto_data["user_data"]["display_name"] == "test_user"
+    user_data = proto_data.get("user_data", {})
+    assert user_data.get("user_id") == 123
+    assert user_data.get("display_name") == "test_user"
 
-    assert len(proto_data["user_posts"]) == 2
-    assert proto_data["user_posts"][0]["post_id"] == 1
-    assert proto_data["user_posts"][1]["post_title"] == "Post 2"
+    user_posts = proto_data.get("user_posts", [])
+    assert len(user_posts) == 2
+    assert user_posts[0].get("post_id") == 1
+    assert user_posts[1].get("post_title") == "Post 2"
 
 
 def test_camel_snake_conversion_functions():

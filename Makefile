@@ -31,7 +31,7 @@ check-format:
 	$(UV) run ruff format --check $(SRC_DIR) $(TEST_DIR)
 
 typecheck:
-	$(UV) run mypy $(SRC_DIR) $(TEST_DIR)
+	$(UV) run pyright $(SRC_DIR) $(TEST_DIR)
 
 fix:
 	$(UV) run ruff check --fix $(SRC_DIR) $(TEST_DIR)

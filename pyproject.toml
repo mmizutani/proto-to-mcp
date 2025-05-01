@@ -29,7 +29,7 @@ dependencies = [
     "grpcio>=1.71.0",
     "grpcio-tools>=1.71.0",
     "protobuf>=5.29.4",
-    "types-protobuf"
+    "types-protobuf>=5.29.1.20250403",
 ]
 requires-python = ">=3.10"
 
@@ -45,15 +45,7 @@ members = [
 main-package = { workspace = true }
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=8.3.5",
-    "pytest-cov>=6.1.1",
-    "ruff>=0.5.0",
-    "mypy>=1.0.0",
-    "twine>=6.1.0",
-    "build>=1.2.2",
-    "uv>=0.1.0",
-]
+dev = []
 
 [project.urls]
 "Homepage" = "https://github.com/mmizutani/proto-to-mcp"
@@ -88,13 +80,6 @@ known-first-party = ["proto_to_mcp"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
@@ -103,7 +88,26 @@ python_classes = "Test*"
 
 [dependency-groups]
 dev = [
-    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "ruff>=0.5.0",
+    "pyright>=1.1.400",
+    "twine>=6.1.0",
+    "build>=1.2.2",
+    "uv>=0.1.0",
+    "pyright>=1.1.400",
     "pytest>=8.3.5",
     "ruff>=0.11.7",
 ]
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__", ".venv", ".git", "dist"]
+pythonVersion = "3.10"
+pythonPlatform = "Darwin"
+typeCheckingMode = "basic"
+reportMissingImports = true
+reportMissingTypeStubs = false
+useLibraryCodeForTypes = true
+venvPath = "."
+venv = ".venv"
