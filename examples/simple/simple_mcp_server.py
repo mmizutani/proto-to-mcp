@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 
 import argparse
@@ -10,8 +11,10 @@ from fastmcp import FastMCP
 from proto_to_mcp.converter import convert_proto_to_mcp
 from proto_to_mcp.grpc_client import GRPCClient
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 # --- Global MCP Instance and gRPC Client ---
 # Initialize outside the class structure for easier decorator application
@@ -162,7 +165,7 @@ class UserResponse:
             instance.email = data['email']
         if 'active' in data:
             instance.active = data['active']
-        if data.get('profile'):
+        if 'profile' in data:
             instance.profile = UserProfile.from_dict(data['profile'])
         return instance
 
@@ -204,6 +207,7 @@ def get_user(user_id: int | None = None) -> dict[str, Any]:
         # Stub implementation when no gRPC server is available
         logger.warning('No gRPC server configured for GreeterService.GetUser')
         return {'error': 'No gRPC server configured'}
+
 
 
 # --- Main Execution ---
