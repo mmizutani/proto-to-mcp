@@ -20,6 +20,7 @@ class MCPServerGenerator:
         self.services = parser.get_services()
         self.messages = parser.get_messages()
         self.package = parser.get_package()
+        self.enums = parser.get_enums()  # Now using the get_enums method we added
 
     def generate_server_code(
         self, output_file: str, server_name: str | None = None, grpc_server: str | None = None
@@ -37,6 +38,11 @@ class MCPServerGenerator:
 
         code = self._generate_imports()
         code += self._generate_global_variables(server_name)
+
+        # Add enum classes if they exist
+        if self.enums:
+            code += self._generate_enum_classes()
+
         code += self._generate_message_classes()
         code += self._generate_tool_functions()
         code += self._generate_main()
@@ -60,7 +66,7 @@ class MCPServerGenerator:
 
         from fastmcp import FastMCP
 
-        from proto_to_mcp.converter import convert_proto_to_mcp
+        from proto_to_mcp.converter import convert_proto_to_mcp, convert_mcp_to_proto
         from proto_to_mcp.grpc_client import GRPCClient
 
 
@@ -88,6 +94,25 @@ class MCPServerGenerator:
         grpc_client: GRPCClient | None = None
 
         """)
+
+    def _generate_enum_classes(self) -> str:
+        """Generate Python classes for Protobuf enum types.
+
+        Returns:
+            str: Enum class definitions as a string
+        """
+        code = "# --- Enum Classes ---\n"
+
+        for enum_name, values in self.enums.items():
+            code += f"class {enum_name}:\n"
+            code += f'    """Enum representing the {enum_name} from the Protobuf definition."""\n'
+
+            for value_name, _ in values.items():
+                code += f'    {value_name} = "{value_name}"\n'
+
+            code += "\n\n"
+
+        return code
 
     def _generate_message_classes(self) -> str:
         """Generate Python classes for Protobuf message types.
@@ -220,8 +245,12 @@ class MCPServerGenerator:
             "bytes": "bytes",
         }
 
-        # Default to original type if not found, but ensure it's a string
-        python_type = type_mapping.get(field_type, field_type or "Any")
+        # Check if type is an enum
+        if field_type in self.enums:
+            python_type = field_type
+        else:
+            # Default to original type if not found, but ensure it's a string
+            python_type = type_mapping.get(field_type, field_type or "Any")
 
         if field_info.get("label") == "repeated":
             return f"list[{python_type}] | None"
@@ -276,10 +305,16 @@ class MCPServerGenerator:
                     code += f"{', '.join(params)}"
                 code += ")\n\n"
 
+                # Convert request to proto format
+                code += "    # Convert request to proto format\n"
+                code += f"    proto_request = convert_mcp_to_proto(request.to_dict(), '{input_type}')\n\n"
+
                 # Call the gRPC service if available
                 code += "    if grpc_client:\n"
-                code += f"        response = grpc_client.call_method('{service_name}', '{method_name}', request.to_dict())\n"
-                code += f"        return cast(dict[str, Any], convert_proto_to_mcp(response, '{output_type}'))\n"
+                code += "        # Send proto-formatted request to gRPC service\n"
+                code += f"        proto_response = grpc_client.call_method('{service_name}', '{method_name}', proto_request)\n\n"
+                code += "        # Convert proto response to MCP format for the client\n"
+                code += f"        return cast(dict[str, Any], convert_proto_to_mcp(proto_response, '{output_type}'))\n"
                 code += "    else:\n"
                 code += "        # Stub implementation when no gRPC server is available\n"
                 code += f"        logger.warning('No gRPC server configured for {service_name}.{method_name}')\n"

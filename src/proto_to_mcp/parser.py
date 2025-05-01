@@ -23,6 +23,7 @@ class ProtoParser:
         self.file_descriptor: FileDescriptorProto | None = None
         self.services: dict[str, dict[str, Any]] = {}
         self.messages: dict[str, dict[str, Any]] = {}
+        self.enums: dict[str, dict[str, Any]] = {}
         self.package = ""
         self._parse()
 
@@ -62,9 +63,17 @@ class ProtoParser:
 
             self.package = self.file_descriptor.package
 
+            # Extract enums
+            for enum_type in self.file_descriptor.enum_type:
+                self.enums[enum_type.name] = self._extract_enum_values(enum_type)
+
             # Extract messages
             for message_type in self.file_descriptor.message_type:
                 self.messages[message_type.name] = self._extract_message_fields(message_type)
+
+                # Extract nested enums
+                for nested_enum in message_type.enum_type:
+                    self.enums[nested_enum.name] = self._extract_enum_values(nested_enum)
 
             # Extract services
             for service in self.file_descriptor.service:
@@ -80,6 +89,20 @@ class ProtoParser:
 
         except Exception as e:
             raise ValueError(f"Failed to parse proto file: {e!s}") from e
+
+    def _extract_enum_values(self, enum_type: Any) -> dict[str, int]:
+        """Extract enum values from an enum type.
+
+        Args:
+            enum_type: The enum type descriptor
+
+        Returns:
+            Dict[str, int]: A dictionary mapping enum value names to their numeric values
+        """
+        values = {}
+        for value in enum_type.value:
+            values[value.name] = value.number
+        return values
 
     def _extract_message_fields(self, message_type: Any) -> dict[str, dict[str, Any]]:
         """Extract field information from a message type.
@@ -160,3 +183,11 @@ class ProtoParser:
             str: The package name
         """
         return self.package
+
+    def get_enums(self) -> dict[str, dict[str, int]]:
+        """Get all enums defined in the proto file.
+
+        Returns:
+            Dict[str, Dict[str, int]]: A dictionary mapping enum names to their values
+        """
+        return self.enums
