@@ -43,7 +43,7 @@ def main():
     )
 
     print(f"MCP server generated successfully: {output_file}")
-    print(f"You can run it with: python {args.output} --grpc-server={args.grpc_server}")
+    print(f"You can run it with: uv run fastmcp run {args.output}:mcp --grpc-server={args.grpc_server}")
     print("Note: Make sure the gRPC server is running at the specified address")
 
 

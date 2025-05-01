@@ -26,7 +26,7 @@ def main():
     generator.generate_server_code(output_file)
 
     print(f"MCP server generated successfully: {output_file}")
-    print("You can run it with: python simple_mcp_server.py")
+    print("You can run it with: uv run fastmcp run simple_mcp_server.py:mcp")
 
 
 if __name__ == "__main__":

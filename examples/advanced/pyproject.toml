@@ -1,7 +1,7 @@
 [project]
-name = "simple"
+name = "advanced"
 version = "0.1.0"
-description = "Simple example of using proto-to-mcp to generate an MCP server from a Protobuf schema."
+description = "Advanced example of using proto-to-mcp to generate an MCP server from a Protobuf schema."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -13,7 +13,7 @@ dependencies = [
 proto-to-mcp = { workspace = true }
 
 [tool.setuptools]
-py-modules = ["simple_mcp_server"]
+py-modules = ["advanced_mcp_server"]
 
 [project.scripts]
-server = "simple_mcp_server:main"
+server = "advanced_mcp_server:main"
