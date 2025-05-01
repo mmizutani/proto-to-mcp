@@ -111,3 +111,6 @@ reportMissingTypeStubs = false
 useLibraryCodeForTypes = true
 venvPath = "."
 venv = ".venv"
+
+[tool.setuptools.package-data]
+"proto_to_mcp" = ["py.typed"]
