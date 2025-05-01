@@ -1,0 +1,19 @@
+[project]
+name = "simple"
+version = "0.1.0"
+description = "Simple example of using proto-to-mcp to generate an MCP server from a Protobuf schema."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastmcp>=2.2.6",
+    "proto-to-mcp",
+]
+
+[tool.uv.sources]
+proto-to-mcp = { workspace = true }
+
+[tool.setuptools]
+py-modules = ["simple_mcp_server"]
+
+[project.scripts]
+server = "simple_mcp_server:main"

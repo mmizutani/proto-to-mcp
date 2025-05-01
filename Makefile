@@ -1,4 +1,4 @@
-.PHONY: all clean test lint format typecheck fix check-format install-protoc install-test-deps
+.PHONY: all clean test lint format typecheck fix check-format install-protoc install-test-deps build
 
 UV ?= uv
 PYTHON ?= python3.13
@@ -46,3 +46,6 @@ install-uv-dev:
 
 install:
 	$(UV) pip install -e "." -p $(PYTHON)
+
+build:
+	$(UV) build
