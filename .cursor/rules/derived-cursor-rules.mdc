@@ -25,7 +25,7 @@ This section lists the technologies used in the project.
 
 ## CODING STANDARDS
 
-This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.  Python 3.13 should be used as the default version for new projects.  `pyproject.toml` should be configured to use an `indent-width` of 4 spaces.
+This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.  Python 3.13 should be used as the default version for new projects.  `pyproject.toml` should be configured to use an `indent-width` of 4 spaces.  Lint errors should be addressed one by one.  Long lines should be broken up to comply with the 120-character limit. Method signatures should be formatted with line breaks for better readability. Unused variables should be removed or renamed (e.g., `field_info` to `_field_info`).
 
 
 ## WORKFLOW & RELEASE RULES

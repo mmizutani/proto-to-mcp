@@ -2,7 +2,6 @@
 
 import os
 import tempfile
-from typing import Any, Dict
 
 from proto_to_mcp.generator import MCPServerGenerator
 from proto_to_mcp.parser import ProtoParser

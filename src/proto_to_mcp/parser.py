@@ -1,12 +1,13 @@
 """Parser module for extracting service and message definitions from Protocol Buffer schema files."""
 
 import os
-from typing import Any, Optional
+import subprocess
+import tempfile
+from typing import Any
 
 # Replace the incorrect import with an alternative approach
 # from google.protobuf.compiler import parser as proto_parser
 from google.protobuf.descriptor_pb2 import FileDescriptorProto, FileDescriptorSet
-from google.protobuf import text_format
 
 
 class ProtoParser:
@@ -19,7 +20,7 @@ class ProtoParser:
             proto_file (str): Path to the .proto file to parse
         """
         self.proto_file = proto_file
-        self.file_descriptor: Optional[FileDescriptorProto] = None
+        self.file_descriptor: FileDescriptorProto | None = None
         self.services: dict[str, dict[str, Any]] = {}
         self.messages: dict[str, dict[str, Any]] = {}
         self.package = ""
@@ -31,14 +32,7 @@ class ProtoParser:
             if not os.path.exists(self.proto_file):
                 raise ValueError(f"Proto file not found: {self.proto_file}")
 
-            # Read the proto file content
-            with open(self.proto_file) as f:
-                content = f.read()
-
             # Parse the proto content using protoc command line tool
-            import subprocess
-            import tempfile
-
             # Create a temporary file for the descriptor set
             with tempfile.NamedTemporaryFile(suffix='.pb') as tmp:
                 # Call protoc to generate a FileDescriptorSet
@@ -85,9 +79,9 @@ class ProtoParser:
                 self.services[service.name] = methods
 
         except Exception as e:
-            raise ValueError(f"Failed to parse proto file: {e!s}")
+            raise ValueError(f"Failed to parse proto file: {e!s}") from e
 
-    def _extract_message_fields(self, message_type) -> dict[str, dict[str, Any]]:
+    def _extract_message_fields(self, message_type: Any) -> dict[str, dict[str, Any]]:
         """Extract field information from a message type.
 
         Args:
@@ -106,7 +100,7 @@ class ProtoParser:
             fields[field.name] = field_info
         return fields
 
-    def _get_field_type(self, field) -> str:
+    def _get_field_type(self, field: Any) -> str:
         """Get the type name for a field.
 
         Args:

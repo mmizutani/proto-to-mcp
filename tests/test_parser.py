@@ -1,10 +1,8 @@
 """Tests for the parser module."""
 
 import os
-from typing import NoReturn
 
 import pytest
-from pytest import raises
 
 from proto_to_mcp.parser import ProtoParser
 
