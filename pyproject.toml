@@ -53,13 +53,12 @@ proto-to-mcp = "proto_to_mcp.cli:main"
 [tool.ruff]
 line-length = 120
 target-version = "py313"
+indent-width = 4
+
+[tool.ruff.lint]
 # Enable Pyflakes (`F`), isort (`I`), and other linters
 select = ["E", "F", "I", "W", "N", "B", "PYI", "UP", "D", "RUF"]
 ignore = []
-
-# Same as Black
-indent-width = 4
-
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
@@ -69,7 +68,7 @@ indent-style = "space"
 line-ending = "auto"
 skip-magic-trailing-comma = false
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 case-sensitive = true
 known-first-party = ["proto_to_mcp"]
 
@@ -91,6 +90,7 @@ python_classes = "Test*"
 
 [dependency-groups]
 dev = [
+    "mypy>=1.15.0",
     "pytest>=8.3.5",
     "ruff>=0.11.7",
 ]

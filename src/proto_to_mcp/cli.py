@@ -1,4 +1,5 @@
 """Command-line interface for proto-to-mcp."""
+
 import argparse
 import logging
 import os
@@ -19,39 +20,18 @@ def main(args: list[str] | None = None) -> int:
     Returns:
         int: Exit code
     """
-    parser = argparse.ArgumentParser(
-        description="Convert Protobuf schema files to MCP server implementations"
-    )
-    parser.add_argument(
-        "proto_file",
-        help="Path to the .proto file"
-    )
-    parser.add_argument(
-        "--output", "-o",
-        help="Output path for the generated MCP server file"
-    )
-    parser.add_argument(
-        "--name", "-n",
-        help="Name for the MCP server (defaults to the proto filename)"
-    )
-    parser.add_argument(
-        "--grpc-server", "-g",
-        help="Address of the gRPC server to connect to"
-    )
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Enable verbose logging"
-    )
+    parser = argparse.ArgumentParser(description="Convert Protobuf schema files to MCP server implementations")
+    parser.add_argument("proto_file", help="Path to the .proto file")
+    parser.add_argument("--output", "-o", help="Output path for the generated MCP server file")
+    parser.add_argument("--name", "-n", help="Name for the MCP server (defaults to the proto filename)")
+    parser.add_argument("--grpc-server", "-g", help="Address of the gRPC server to connect to")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
 
     parsed_args = parser.parse_args(args)
 
     # Configure logging
     log_level = logging.DEBUG if parsed_args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     try:
         # Validate input file
@@ -79,9 +59,7 @@ def main(args: list[str] | None = None) -> int:
         logger.info(f"Generating MCP server: {output_file}")
         generator = MCPServerGenerator(parser)
         generator.generate_server_code(
-            output_file=output_file,
-            server_name=parsed_args.name,
-            grpc_server=parsed_args.grpc_server
+            output_file=output_file, server_name=parsed_args.name, grpc_server=parsed_args.grpc_server
         )
 
         logger.info(f"Successfully generated MCP server: {output_file}")

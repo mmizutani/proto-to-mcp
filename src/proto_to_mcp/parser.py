@@ -1,4 +1,5 @@
 """Parser module for extracting service and message definitions from Protocol Buffer schema files."""
+
 import os
 from typing import Any
 

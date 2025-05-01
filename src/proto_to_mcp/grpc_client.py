@@ -1,4 +1,5 @@
 """gRPC client module for connecting to gRPC services."""
+
 import importlib
 import logging
 from typing import Any
@@ -93,6 +94,7 @@ class GRPCClient:
 
             # Create a secure channel to the server
             import grpc
+
             channel = grpc.insecure_channel(self.server_address)
 
             # Create the stub
@@ -164,18 +166,18 @@ class GRPCClient:
         try:
             # Use the MessageToDict utility from google.protobuf.json_format if available
             from google.protobuf.json_format import MessageToDict
+
             return MessageToDict(message, preserving_proto_field_name=True)
         except ImportError:
             # Fallback to a manual conversion if the import fails
             result = {}
             for field in message.DESCRIPTOR.fields:
                 value = getattr(message, field.name)
-                if hasattr(value, 'DESCRIPTOR'):
+                if hasattr(value, "DESCRIPTOR"):
                     result[field.name] = self._message_to_dict(value)
                 elif isinstance(value, list | tuple):
                     result[field.name] = [
-                        self._message_to_dict(item) if hasattr(item, 'DESCRIPTOR') else item
-                        for item in value
+                        self._message_to_dict(item) if hasattr(item, "DESCRIPTOR") else item for item in value
                     ]
                 else:
                     result[field.name] = value
@@ -191,5 +193,6 @@ class GRPCClient:
             str: The name in snake_case
         """
         import re
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+        return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()

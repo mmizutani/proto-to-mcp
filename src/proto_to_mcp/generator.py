@@ -1,20 +1,16 @@
-"""
-Generator module for creating MCP server code from parsed Protocol Buffer definitions.
-"""
+"""Generator module for creating MCP server code from parsed Protocol Buffer definitions."""
 import os
-from typing import Dict, List, Optional, Any
 import textwrap
+from typing import Any
+
 from .parser import ProtoParser
 
 
 class MCPServerGenerator:
-    """
-    Generator for MCP server code from Protocol Buffer service definitions.
-    """
+    """Generator for MCP server code from Protocol Buffer service definitions."""
 
     def __init__(self, parser: ProtoParser):
-        """
-        Initialize the generator with a ProtoParser instance.
+        """Initialize the generator with a ProtoParser instance.
 
         Args:
             parser (ProtoParser): The parser with extracted proto definitions
@@ -24,9 +20,8 @@ class MCPServerGenerator:
         self.messages = parser.get_messages()
         self.package = parser.get_package()
 
-    def generate_server_code(self, output_file: str, server_name: Optional[str] = None, grpc_server: Optional[str] = None) -> None:
-        """
-        Generate an MCP server implementation and write it to the specified output file.
+    def generate_server_code(self, output_file: str, server_name: str | None = None, grpc_server: str | None = None) -> None:
+        """Generate an MCP server implementation and write it to the specified output file.
 
         Args:
             output_file (str): Path to write the generated server code
@@ -46,8 +41,7 @@ class MCPServerGenerator:
             f.write(code)
 
     def _generate_imports(self) -> str:
-        """
-        Generate the import statements for the MCP server.
+        """Generate the import statements for the MCP server.
 
         Returns:
             str: Import statements as a string
@@ -72,8 +66,7 @@ class MCPServerGenerator:
         """)
 
     def _generate_message_classes(self) -> str:
-        """
-        Generate Python classes for Protobuf message types.
+        """Generate Python classes for Protobuf message types.
 
         Returns:
             str: Message class definitions as a string
@@ -136,9 +129,8 @@ class MCPServerGenerator:
 
         return code
 
-    def _get_python_type(self, field_info: Dict[str, Any]) -> str:
-        """
-        Get the Python type annotation for a field.
+    def _get_python_type(self, field_info: dict[str, Any]) -> str:
+        """Get the Python type annotation for a field.
 
         Args:
             field_info (Dict[str, Any]): Information about the field
@@ -174,9 +166,8 @@ class MCPServerGenerator:
 
         return python_type
 
-    def _generate_server_class(self, server_name: str, grpc_server: Optional[str]) -> str:
-        """
-        Generate the MCP server class.
+    def _generate_server_class(self, server_name: str, grpc_server: str | None) -> str:
+        """Generate the MCP server class.
 
         Args:
             server_name (str): Name for the MCP server class
@@ -245,8 +236,7 @@ class MCPServerGenerator:
         return code
 
     def _camel_to_snake(self, name: str) -> str:
-        """
-        Convert a camelCase or PascalCase name to snake_case.
+        """Convert a camelCase or PascalCase name to snake_case.
 
         Args:
             name (str): The name to convert
@@ -259,8 +249,7 @@ class MCPServerGenerator:
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
 
     def _generate_main(self, server_name: str) -> str:
-        """
-        Generate the main function to run the server.
+        """Generate the main function to run the server.
 
         Args:
             server_name (str): Name of the server class
@@ -270,7 +259,7 @@ class MCPServerGenerator:
         """
         return textwrap.dedent(f"""
         def main():
-            """Run the MCP server."""
+            \"""Run the MCP server.\"""
             parser = argparse.ArgumentParser(description='Run the {server_name}')
             parser.add_argument('--grpc-server', '-g', help='Address of the gRPC server to connect to')
             parser.add_argument('--host', default='localhost', help='Host to bind the server to')

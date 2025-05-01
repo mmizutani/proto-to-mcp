@@ -1,15 +1,11 @@
 """Tests for the converter module."""
+
 from proto_to_mcp.converter import convert_mcp_to_proto, convert_proto_to_mcp
 
 
 def test_convert_proto_to_mcp_primitives():
     """Test conversion of primitive types from Protobuf to MCP format."""
-    proto_data = {
-        "id": 123,
-        "name": "test",
-        "active": True,
-        "score": 98.6
-    }
+    proto_data = {"id": 123, "name": "test", "active": True, "score": 98.6}
 
     mcp_data = convert_proto_to_mcp(proto_data)
 
@@ -19,14 +15,8 @@ def test_convert_proto_to_mcp_primitives():
 def test_convert_proto_to_mcp_nested():
     """Test conversion of nested objects from Protobuf to MCP format."""
     proto_data = {
-        "user": {
-            "id": 123,
-            "name": "test_user"
-        },
-        "posts": [
-            {"id": 1, "title": "Post 1"},
-            {"id": 2, "title": "Post 2"}
-        ]
+        "user": {"id": 123, "name": "test_user"},
+        "posts": [{"id": 1, "title": "Post 1"}, {"id": 2, "title": "Post 2"}],
     }
 
     mcp_data = convert_proto_to_mcp(proto_data)
@@ -40,12 +30,7 @@ def test_convert_proto_to_mcp_nested():
 
 def test_convert_mcp_to_proto_primitives():
     """Test conversion of primitive types from MCP to Protobuf format."""
-    mcp_data = {
-        "id": 123,
-        "name": "test",
-        "isActive": True,
-        "score": 98.6
-    }
+    mcp_data = {"id": 123, "name": "test", "isActive": True, "score": 98.6}
 
     proto_data = convert_mcp_to_proto(mcp_data)
 
@@ -60,14 +45,8 @@ def test_convert_mcp_to_proto_primitives():
 def test_convert_mcp_to_proto_nested():
     """Test conversion of nested objects from MCP to Protobuf format."""
     mcp_data = {
-        "userData": {
-            "userId": 123,
-            "displayName": "test_user"
-        },
-        "userPosts": [
-            {"postId": 1, "postTitle": "Post 1"},
-            {"postId": 2, "postTitle": "Post 2"}
-        ]
+        "userData": {"userId": 123, "displayName": "test_user"},
+        "userPosts": [{"postId": 1, "postTitle": "Post 1"}, {"postId": 2, "postTitle": "Post 2"}],
     }
 
     proto_data = convert_mcp_to_proto(mcp_data)

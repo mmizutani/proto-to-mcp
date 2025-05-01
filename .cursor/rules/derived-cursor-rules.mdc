@@ -5,7 +5,8 @@ globs: *
 
 ## PROJECT DOCUMENTATION & CONTEXT SYSTEM
 
-This section outlines the standards for project documentation and the context system used by the AI coding assistant.  All documentation must be clear, concise, and easily accessible.  The README.md file should include instructions for installing dependencies using both pip and uv. A Makefile should be included to execute test, lint, format and type check.  See the example Makefile generated on 2025-05-01.  The README should include instructions for using the Makefile (added 2025-05-01).
+This section outlines the standards for project documentation and the context system used by the AI coding assistant.  All documentation must be clear, concise, and easily accessible.  The README.md file should include instructions for installing dependencies using both pip and uv. A Makefile should be included to execute test, lint, format and type check.  See the example Makefile generated on 2025-05-01.  The README should include instructions for using the Makefile (added 2025-05-01).  The Makefile should utilize `uv` for managing commands (added 2025-05-01).
+
 
 ## TECH STACK
 
@@ -18,21 +19,22 @@ This section lists the technologies used in the project.
 * **Pre-commit hooks:** ruff, ruff-format, trailing-whitespace, end-of-file-fixer, check-yaml, check-toml, debug-statements, mypy
 * **Build System:** Makefile (added 2025-05-01)
 * **Testing Framework:** pytest
+* **Testing Coverage:** pytest-cov (added 2025-05-01)
 
 
 ## CODING STANDARDS
 
-This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.  Python 3.13 should be used as the default version for new projects.
+This section outlines the coding standards to be followed in the project.  Code must be well-formatted, readable, and maintainable.  Adherence to PEP 8 is expected.  Ruff is the designated formatter and linter.  See the README for usage instructions.  Python 3.13 should be used as the default version for new projects.  `pyproject.toml` should be configured to use an `indent-width` of 4 spaces.
 
 
 ## WORKFLOW & RELEASE RULES
 
-This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.  The CI workflow should utilize uv for dependency management and should use caching as described in https://docs.astral.sh/uv/guides/integration/github/ (added 2025-05-01). The CI workflow should use Python 3.13. A Makefile should be used to streamline testing, linting, formatting, and type checking.  See the example Makefile generated on 2025-05-01 for a reference implementation. Lint, format, typecheck, and test should be run as separate jobs in the CI workflow (added 2025-05-01).
+This section details the project's workflow and release processes.  All code changes must be reviewed before merging into the main branch.  Pre-commit hooks should be used to ensure code quality before commits.  The CI workflow should utilize uv for dependency management and should use caching as described in https://docs.astral.sh/uv/guides/integration/github/ (added 2025-05-01). The CI workflow should use Python 3.13. A Makefile should be used to streamline testing, linting, formatting, and type checking.  See the example Makefile generated on 2025-05-01 for a reference implementation. Lint, format, typecheck, and test should be run as separate jobs in the CI workflow (added 2025-05-01).  The Makefile should include targets for `test`, `test-coverage`, `install-pytest-cov`, `install-test-deps`, and `install`. (added 2025-05-01)  Makefile commands should utilize `uv` for command management (added 2025-05-01).  The Makefile should use `uv` to manage all commands.
+
 
 ## DEBUGGING
 
-This section outlines debugging procedures and best practices.
-
+This section outlines debugging procedures and best practices.  Error messages from `make format` should be carefully examined.  The error "Expected ',', found name" often indicates a missing comma in a Python tuple or list.
 
 ## REFERENCES
 
@@ -42,3 +44,4 @@ This section lists relevant references and documentation.
 * uv: (link to uv documentation needed -  To be added after confirmation from user)
 * pytest: (link to pytest documentation needed)
 * mypy: https://mypy.readthedocs.io/
+* pytest-cov: (link to pytest-cov documentation needed - to be added after user confirmation)

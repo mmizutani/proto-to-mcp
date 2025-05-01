@@ -1,4 +1,5 @@
 """Tests for the parser module."""
+
 import pytest
 
 from proto_to_mcp.parser import ProtoParser
@@ -66,7 +67,7 @@ class MockProtoParser(ProtoParser):
                     "number": 2,
                     "type": "string",
                     "label": "optional",
-                }
+                },
             },
             "GetDataRequest": {
                 "id": {
@@ -81,7 +82,7 @@ class MockProtoParser(ProtoParser):
                     "type": "TestMessage",
                     "label": "optional",
                 }
-            }
+            },
         }
 
     def _parse(self):

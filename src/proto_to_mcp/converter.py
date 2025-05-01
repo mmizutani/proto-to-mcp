@@ -1,9 +1,11 @@
 """Converter module for converting between Protocol Buffer and MCP data formats."""
+
 from typing import Any
 
 
-def convert_proto_to_mcp(proto_data: dict[str, Any] | list[dict[str, Any]],
-                         message_type: str | None = None) -> dict[str, Any] | list[dict[str, Any]]:
+def convert_proto_to_mcp(
+    proto_data: dict[str, Any] | list[dict[str, Any]], message_type: str | None = None
+) -> dict[str, Any] | list[dict[str, Any]]:
     """Convert Protocol Buffer data to MCP format.
 
     Args:
@@ -37,8 +39,9 @@ def convert_proto_to_mcp(proto_data: dict[str, Any] | list[dict[str, Any]],
     return result
 
 
-def convert_mcp_to_proto(mcp_data: dict[str, Any] | list[dict[str, Any]],
-                         message_type: str | None = None) -> dict[str, Any] | list[dict[str, Any]]:
+def convert_mcp_to_proto(
+    mcp_data: dict[str, Any] | list[dict[str, Any]], message_type: str | None = None
+) -> dict[str, Any] | list[dict[str, Any]]:
     """Convert MCP data to Protocol Buffer format.
 
     Args:
@@ -85,8 +88,9 @@ def _camel_to_snake(name: str) -> str:
         str: The name in snake_case
     """
     import re
-    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
+    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
 def _snake_to_camel(name: str) -> str:
@@ -98,5 +102,5 @@ def _snake_to_camel(name: str) -> str:
     Returns:
         str: The name in camelCase
     """
-    components = name.split('_')
-    return components[0] + ''.join(x.title() for x in components[1:])
+    components = name.split("_")
+    return components[0] + "".join(x.title() for x in components[1:])

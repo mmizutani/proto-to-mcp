@@ -1,4 +1,5 @@
 """Tests for the generator module."""
+
 import os
 import tempfile
 
