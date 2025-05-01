@@ -33,7 +33,7 @@ make install
 This example includes a utility script to generate the server code from a Proto file:
 
 ```bash
-python generate_server.py
+uv run python generate_server.py
 ```
 
 Or using the Makefile:
@@ -65,8 +65,8 @@ By default, this starts the MCP server with the stdio transport.
 
 - `--grpc-server` or `-g`: Address of the gRPC server to connect to (e.g., localhost:50051)
 - `--transport` or `-t`: Transport to use (stdio, sse) (default: stdio)
-- `--host` or `-H`: Host to bind the server to (default: 127.0.0.1)
-- `--port` or `-p`: Port to bind the server to (default: 9000)
+- `--host` or `-H`: Host to bind the server to (default: 127.0.0.1, only applicable to sse transport)
+- `--port` or `-p`: Port to bind the server to (default: 9000, only applicable to sse transport)
 
 Example:
 
@@ -104,7 +104,7 @@ You can connect to this MCP server from any MCP-compatible client, including Cla
 If you make changes to the underlying proto file, you can regenerate the MCP server code with:
 
 ```bash
-python generate_server.py
+uv run python generate_server.py
 # or
 make generate
 ```

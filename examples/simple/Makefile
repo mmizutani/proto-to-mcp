@@ -1,7 +1,6 @@
 .PHONY: all clean install generate run
 
 UV ?= uv
-PYTHON ?= python3
 
 all: install generate
 
@@ -12,7 +11,7 @@ install:
 	$(UV) sync
 
 generate:
-	$(PYTHON) generate_server.py
+	$(UV) run python generate_server.py
 
 run:
 	$(UV) run fastmcp run simple_mcp_server.py:mcp
