@@ -51,7 +51,7 @@ dev = [
 proto-to-mcp = "proto_to_mcp.cli:main"
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py313"
 # Enable Pyflakes (`F`), isort (`I`), and other linters
 select = ["E", "F", "I", "W", "N", "B", "PYI", "UP", "D", "RUF"]
@@ -91,5 +91,6 @@ python_classes = "Test*"
 
 [dependency-groups]
 dev = [
+    "pytest>=8.3.5",
     "ruff>=0.11.7",
 ]

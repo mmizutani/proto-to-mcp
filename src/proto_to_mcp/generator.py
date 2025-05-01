@@ -54,21 +54,21 @@ class MCPServerGenerator:
         """
         return textwrap.dedent("""
         #!/usr/bin/env python3
-        
+
         import os
         import json
         import argparse
         import logging
         from typing import Dict, List, Optional, Any, Union
-        
+
         from fastmcp import FastMCP, Parameter, Tool, MCPResponse
         from proto_to_mcp.converter import convert_proto_to_mcp, convert_mcp_to_proto
         from proto_to_mcp.grpc_client import GRPCClient
-        
-        
+
+
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
-        
+
         """)
 
     def _generate_message_classes(self) -> str:
@@ -79,21 +79,21 @@ class MCPServerGenerator:
             str: Message class definitions as a string
         """
         code = "# Message classes\n"
-        
+
         for message_name, fields in self.messages.items():
             code += f"class {message_name}:\n"
             code += f"    \"\"\"Represents the {message_name} message from the Protobuf definition.\"\"\"\n\n"
-            
+
             # Generate __init__ method
             code += "    def __init__(self"
             for field_name, field_info in fields.items():
                 code += f", {field_name}: Optional[{self._get_python_type(field_info)}] = None"
             code += "):\n"
-            
+
             # Initialize fields
             for field_name in fields:
                 code += f"        self.{field_name} = {field_name}\n"
-            
+
             # Generate to_dict method
             code += "\n    def to_dict(self) -> Dict[str, Any]:\n"
             code += "        \"\"\"Convert message to a dictionary.\"\"\"\n"
@@ -112,7 +112,7 @@ class MCPServerGenerator:
                     code += f"        if self.{field_name} is not None:\n"
                     code += f"            result['{field_name}'] = self.{field_name}\n"
             code += "        return result\n"
-            
+
             # Generate from_dict static method
             code += "\n    @staticmethod\n"
             code += f"    def from_dict(data: Dict[str, Any]) -> '{message_name}':\n"
@@ -131,9 +131,9 @@ class MCPServerGenerator:
                 else:
                     code += f"            instance.{field_name} = data['{field_name}']\n"
             code += "        return instance\n"
-            
+
             code += "\n\n"
-            
+
         return code
 
     def _get_python_type(self, field_info: Dict[str, Any]) -> str:
@@ -147,7 +147,7 @@ class MCPServerGenerator:
             str: Python type annotation
         """
         field_type = field_info.get("type", "")
-        
+
         # Map protobuf types to Python types
         type_mapping = {
             "double": "float",
@@ -166,12 +166,12 @@ class MCPServerGenerator:
             "string": "str",
             "bytes": "bytes",
         }
-        
+
         python_type = type_mapping.get(field_type, field_type)
-        
+
         if field_info.get("label") == "repeated":
             return f"List[{python_type}]"
-        
+
         return python_type
 
     def _generate_server_class(self, server_name: str, grpc_server: Optional[str]) -> str:
@@ -187,52 +187,52 @@ class MCPServerGenerator:
         """
         code = f"class {server_name}(FastMCP):\n"
         code += f'    """MCP server for {self.package} services."""\n\n'
-        
+
         # Initialize with gRPC client if specified
         code += "    def __init__(self, grpc_server: Optional[str] = None):\n"
         code += '        """Initialize the MCP server."""\n'
         code += f'        super().__init__(title="{server_name}", description="MCP server for {self.package} services")\n'
-        
+
         if grpc_server:
             code += f'        self.grpc_client = GRPCClient("{grpc_server}")\n'
         else:
             code += '        self.grpc_client = GRPCClient(os.getenv("GRPC_SERVER")) if os.getenv("GRPC_SERVER") else None\n'
-        
+
         code += "\n"
-        
+
         # Generate tool methods for each RPC
         for service_name, methods in self.services.items():
             for method_name, method_info in methods.items():
                 input_type = method_info["input_type"]
                 output_type = method_info["output_type"]
                 python_method_name = self._camel_to_snake(method_name)
-                
+
                 # Skip streaming methods for now (they're more complex)
                 if method_info["client_streaming"] or method_info["server_streaming"]:
                     code += f"    # TODO: Implement streaming method {method_name}\n\n"
                     continue
-                
+
                 # Generate the tool method
                 code += f"    @Tool(name='{python_method_name}', description='Call the {method_name} RPC from {service_name}')\n"
-                
+
                 # Generate parameters based on input message fields
                 if input_type in self.messages:
                     for field_name, field_info in self.messages[input_type].items():
                         python_type = self._get_python_type(field_info)
                         description = f"The {field_name} field for the {input_type} message"
                         code += f"    @Parameter('{field_name}', description='{description}')\n"
-                
+
                 # Generate the method
                 code += f"    def {python_method_name}(self, **kwargs) -> MCPResponse:\n"
                 code += f'        """Call the {method_name} RPC method."""\n'
                 code += f"        request = {input_type}()\n"
-                
+
                 # Set request fields
                 if input_type in self.messages:
                     for field_name in self.messages[input_type]:
                         code += f"        if '{field_name}' in kwargs:\n"
                         code += f"            request.{field_name} = kwargs['{field_name}']\n"
-                
+
                 # If we have a gRPC client, use it
                 code += "\n        if self.grpc_client:\n"
                 code += f"            response = self.grpc_client.call_method('{service_name}', '{method_name}', request.to_dict())\n"
@@ -241,7 +241,7 @@ class MCPServerGenerator:
                 code += "            # Stub implementation when no gRPC server is available\n"
                 code += f"            logger.warning('No gRPC server configured for {service_name}.{method_name}')\n"
                 code += "            return MCPResponse({'error': 'No gRPC server configured'})\n\n"
-        
+
         return code
 
     def _camel_to_snake(self, name: str) -> str:
@@ -276,11 +276,11 @@ class MCPServerGenerator:
             parser.add_argument('--host', default='localhost', help='Host to bind the server to')
             parser.add_argument('--port', '-p', type=int, default=8000, help='Port to bind the server to')
             args = parser.parse_args()
-            
+
             server = {server_name}(grpc_server=args.grpc_server)
             server.run(host=args.host, port=args.port)
-        
-        
+
+
         if __name__ == '__main__':
             main()
         """)

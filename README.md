@@ -265,7 +265,40 @@ pip install pre-commit
 pre-commit install
 ```
 
-### Run Tests
+### Using the Makefile
+
+The project includes a Makefile with several useful commands to streamline development:
+
+```bash
+# Run tests
+make test
+
+# Run linting
+make lint
+
+# Format code
+make format
+
+# Run type checking
+make typecheck
+
+# Run linting, type checking, and tests
+make all
+
+# Fix linting issues and format code
+make fix
+
+# Clean build artifacts and cache
+make clean
+
+# Install development dependencies using pip
+make install-dev
+
+# Install development dependencies using uv
+make install-uv-dev
+```
+
+### Testing
 
 ```bash
 pytest
