@@ -34,21 +34,21 @@ class ProtoParser:
 
             # Parse the proto content using protoc command line tool
             # Create a temporary file for the descriptor set
-            with tempfile.NamedTemporaryFile(suffix='.pb') as tmp:
+            with tempfile.NamedTemporaryFile(suffix=".pb") as tmp:
                 # Call protoc to generate a FileDescriptorSet
                 protoc_cmd = [
                     "protoc",
                     f"--proto_path={os.path.dirname(self.proto_file)}",
                     f"--descriptor_set_out={tmp.name}",
                     "--include_imports",
-                    self.proto_file
+                    self.proto_file,
                 ]
 
                 subprocess.run(protoc_cmd, check=True)
 
                 # Read the descriptor set
                 file_descriptor_set = FileDescriptorSet()
-                with open(tmp.name, 'rb') as f:
+                with open(tmp.name, "rb") as f:
                     file_descriptor_set.ParseFromString(f.read())
 
                 # Get the first file descriptor (our target .proto file)
