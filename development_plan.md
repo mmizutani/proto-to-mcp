@@ -4,27 +4,37 @@
 
 ## Phase 1: Basic Functionality (2-3 weeks)
 
-Set up project structure and dependencies
-Implement Protobuf parsing functionality
-Create basic MCP server code generator
-Develop simple type conversion between Protobuf and MCP
-Build command-line interface
-Write initial tests for basic functionality
+- [x] Set up project structure and dependencies
+- [x] Implement Protobuf parsing functionality
+- [x] Create basic MCP server code generator
+- [x] Develop simple type conversion between Protobuf and MCP
+- [x] Build command-line interface
+- [ ] Write initial tests for basic functionality
 
 ## Phase 2: Enhanced Features (2-3 weeks)
 
-Support for complex Protobuf features (nested messages, enums, etc.)
-Implement resource mapping for read-only operations
-Add support for streaming services
-Create configuration file for customizing generation
-Improve error handling and reporting
-Add comprehensive logging
+- [x] Support for complex Protobuf features (nested messages, enums, etc.)
+- [ ] Implement resource mapping for read-only operations
+- [ ] Add support for streaming services
+- [ ] Create configuration file for customizing generation
+- [ ] Improve error handling and reporting
+- [ ] Add comprehensive logging
+- [ ] Replace custom Protobuf parser with [proto-schema-parser](https://github.com/criccomini/proto-schema-parser)
+- [ ] Support Protobuf validation
 
-## Phase 3: Documentation and Polish (1-2 weeks)
+## Phase 3: Advanced Integration (2-3 weeks)
 
-Write comprehensive documentation
-Create usage examples
-Implement CI/CD pipeline
-Add containerization support
-Conduct security review
-Prepare for open-source release
+- [ ] MCP client generation from Protobuf definitions (Python)
+- [ ] MCP client generation from Protobuf definitions (Go)
+- [ ] Integration with popular frameworks like FastAPI
+- [ ] Add plugin system for extensibility
+- [ ] Performance optimizations
+
+## Phase 4: Documentation and Polish (1-2 weeks)
+
+- [ ] Write comprehensive documentation
+- [ ] Create usage examples
+- [ ] Implement CI/CD pipeline
+- [ ] Add containerization support
+- [ ] Conduct security review
+- [ ] Prepare for open-source release
